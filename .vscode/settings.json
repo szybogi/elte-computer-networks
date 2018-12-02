@@ -1,12 +1,9 @@
 {
-    "git.path": "C:\\Users\\alexaegis\\Downloads\\PortableGit\\cmd\\git.exe",
-    "python.pythonPath": "C:\\Python27\\python.exe",
-    "editor.formatOnSave": true,
-    "[python]": {
-        "editor.formatOnSave": true
-    },
-    "cSpell.words": [
-        "colorsys",
-        "elte"
-    ]
+  "git.path": "C:\\Users\\szybogi\\Downloads\\PortableGit\\cmd\\git.exe",
+  "python.pythonPath": "C:\\Program Files\\Python27\\python.exe",
+  "editor.formatOnSave": true,
+  "[python]": {
+    "editor.formatOnSave": true
+  },
+  "cSpell.words": ["colorsys", "elte"]
 }
