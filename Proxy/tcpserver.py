@@ -2,6 +2,7 @@ import select
 import socket
 import sys
 import struct
+import datetime
 
 
 class SimpleTCPSelectServer:
@@ -13,6 +14,7 @@ class SimpleTCPSelectServer:
         self.timeout = timeout
         self.udpserver_address = (addr, 10000)
         self.udpclient = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.cache = {}
 
     def setupServer(self, addr, port):
         # Create a TCP/IP socket
@@ -46,16 +48,24 @@ class SimpleTCPSelectServer:
         data = sock.recv(1024)
         message = self.unpack_message(data)
         if data:
+            message_to_client = None
             print "TCPServer got messagge:" + message
-            self.udpclient.connect(self.udpserver_address)
-            self.udpclient.sendall(data)
-            udp_data = self.udpclient.recv(4096)
-            if udp_data:
-                print "TCPServer got messagge:" + udp_data
-                sock.sendall(udp_data)
-            else:
-                print '\nDisconnected from server'
-                sys.exit()
+            if message in self.cache:
+                result, time = self.cache[message]
+                if True:
+                    message_to_client = result
+
+            if message_to_client is None:
+                self.udpclient.connect(self.udpserver_address)
+                self.udpclient.sendall(data)
+                udp_data = self.udpclient.recv(4096)
+                if udp_data:
+                    print "TCPServer got messagge:" + udp_data
+                    message_to_client = udp_data
+                    self.cache[message] = (
+                        message_to_client, datetime.datetime.now())
+
+            sock.sendall(message_to_client)
         else:
             # Interpret empty result as closed connection
             print >>sys.stderr, 'closing', sock.getpeername(), 'after reading no data'
