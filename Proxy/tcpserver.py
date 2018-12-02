@@ -52,7 +52,7 @@ class SimpleTCPSelectServer:
             print "TCPServer got messagge:" + message
             if message in self.cache:
                 result, time = self.cache[message]
-                if True:
+                if datetime.datetime.now() - time < datetime.timedelta(seconds=8):
                     message_to_client = result
 
             if message_to_client is None:
