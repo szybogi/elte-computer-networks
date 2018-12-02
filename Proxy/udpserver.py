@@ -20,19 +20,15 @@ class UDPServer:
             '/': first / second
         }[oper]
 
-    def unpack_message(self, data):
-        unpacker = struct.Struct('I 1s I')
-        unpacked_data = unpacker.unpack(data)
-        first_number, oper, second_number = unpacked_data
-        result = self.calculate(oper, first_number, second_number)
-        return result
-
     def handleConnections(self):
         while self.inputs:
             try:
-                data = self.server.recvfrom(4096)
-                result = self.unpack_message(data)
-                self.server.sendall("Hello, I'm udp server.")
+                data, address = self.server.recvfrom(4096)
+                unpacker = struct.Struct('I 1s I')
+                unpacked_data = unpacker.unpack(data)
+                first, oper, second = unpacked_data
+                result = self.calculate(oper, first, second)
+                self.server.sendto(str(result), address)
 
             except KeyboardInterrupt:
                 print "Close the system"
