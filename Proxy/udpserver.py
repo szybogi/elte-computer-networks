@@ -29,6 +29,9 @@ class UDPServer:
                 first, oper, second = unpacked_data
                 result = self.calculate(oper, first, second)
                 self.server.sendto(str(result), address)
+                print "UDPServet got message: " + \
+                    str(first) + oper + str(second)
+                print "Sent: " + str(result)
 
             except KeyboardInterrupt:
                 print "Close the system"
